@@ -16,6 +16,8 @@
             <th>Player Name</th>
             <th>Projected Fantasy Points</th>
             <th>PFP Slope</th>
+            <th>PFP Drop-6</th>
+            <th>PFP Drop-12</th>
             <th>Avg. Expert Rank</th>
           </tr>
         </thead>
@@ -103,7 +105,7 @@
       function renderSummaryTable() {
         var tableHTML;
 
-        var pos, rank, playerName, projFantasyPoints, pfpSlope, avgExpertRank;
+        var pos, rank, playerName, projFantasyPoints, pfpSlope, avgExpertRank, drop6, drop12;
         for (let posIdx=0; posIdx < allPositions.length; posIdx++) {
           tableHTML += '<tr>';
           pos = allPositions[posIdx];
@@ -116,7 +118,7 @@
           if (firstAvailIdx == draftData[pos].length) {
             // No remaining players in this position
             tableHTML += '<td>' + pos + '</td>';
-            tableHTML += '<td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td></tr>';
+            tableHTML += '<td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td></tr>';
           }
 
           rank = firstAvailIdx + 1;
@@ -125,11 +127,18 @@
           pfpSlope = draftData[pos][firstAvailIdx]['projected_fantasy_slope'];
           avgExpertRank = draftData[pos][firstAvailIdx]['avg_expert_rank'];
 
+          drop6Idx = Math.min(draftData[pos].length, firstAvailIdx+6);
+          drop12Idx = Math.min(draftData[pos].length, firstAvailIdx+12);
+          drop6 = draftData[pos][firstAvailIdx]['projected_fantasy_total'] - draftData[pos][drop6Idx]['projected_fantasy_total'];
+          drop12 = draftData[pos][firstAvailIdx]['projected_fantasy_total'] - draftData[pos][drop12Idx]['projected_fantasy_total'];
+
           tableHTML += '<td>' + pos + '</td>';
           tableHTML += '<td>' + rank + '</td>';
           tableHTML += '<td>' + playerName + '</td>';
           tableHTML += '<td>' + round2Decimals(projFantasyPoints) + '</td>';
           tableHTML += '<td>' + round2Decimals(pfpSlope) + '</td>';
+          tableHTML += '<td>' + round2Decimals(drop6) + '</td>';
+          tableHTML += '<td>' + round2Decimals(drop12) + '</td>';
           tableHTML += '<td>' + round2Decimals(avgExpertRank) + '</td>';
 
           tableHTML += '</tr>';

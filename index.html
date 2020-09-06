@@ -146,27 +146,36 @@
         $('#summary_table').html(tableHTML);
       }
 
-      function buildChartClickHander(pos) {
+      function buildChartClickHander(pos, chart) {
         return (evt, activePoint) => {
-          var chart = activePoint[0]._chart;
-          var data = chart.data;
-          var elemIdx = activePoint[0]._index;
-          if (evt.shiftKey) {
-            // Hold shift to toggle all players above selected player
-            for (let i = 0; i <= elemIdx; i++) {
-              draftData[pos][i]['drafted'] = !draftData[pos][i]['drafted'];
-              if (draftData[pos][i]['drafted']) {
-                data.datasets[0].backgroundColor[i] = chartColors.red;
-              } else {
-                data.datasets[0].backgroundColor[i] = chartColors.green;
+          if (activePoint.length == 0) {
+            // Clicked on chart, but not on a specific player
+            for(let i = 0; i < chart.data.labels.length; i++) {
+              if (!draftData[pos][i]['drafted']) {
+                draftData[pos][i]['drafted'] = true;
+                chart.data.datasets[0].backgroundColor[i] = chartColors.red;
+                break;
               }
             }
           } else {
-            draftData[pos][elemIdx]['drafted'] = !draftData[pos][elemIdx]['drafted'];
-            if (draftData[pos][elemIdx]['drafted']) {
-              data.datasets[0].backgroundColor[elemIdx] = chartColors.red;
+            var elemIdx = activePoint[0]._index;
+            if (evt.shiftKey) {
+              // Hold shift to toggle all players above selected player
+              for (let i = 0; i <= elemIdx; i++) {
+                draftData[pos][i]['drafted'] = !draftData[pos][i]['drafted'];
+                if (draftData[pos][i]['drafted']) {
+                  chart.data.datasets[0].backgroundColor[i] = chartColors.red;
+                } else {
+                  chart.data.datasets[0].backgroundColor[i] = chartColors.green;
+                }
+              }
             } else {
-              data.datasets[0].backgroundColor[elemIdx] = chartColors.green;
+              draftData[pos][elemIdx]['drafted'] = !draftData[pos][elemIdx]['drafted'];
+              if (draftData[pos][elemIdx]['drafted']) {
+                chart.data.datasets[0].backgroundColor[elemIdx] = chartColors.red;
+              } else {
+                chart.data.datasets[0].backgroundColor[elemIdx] = chartColors.green;
+              }
             }
           }
           chart.update();
@@ -219,7 +228,7 @@
         chart.data.datasets[1].data = pfpSlope;
 
         chart.options.title.text = pos;
-        chart.options.onClick = buildChartClickHander(pos);
+        chart.options.onClick = buildChartClickHander(pos, chart);
       }
 
       function renderAllPositionFantasyChart() {

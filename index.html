@@ -19,6 +19,7 @@
             <th>PFP Drop-6</th>
             <th>PFP Drop-12</th>
             <th>Avg. Expert Rank</th>
+            <th>Overall ADP</th>
           </tr>
         </thead>
         <tbody id="summary_table">
@@ -118,7 +119,7 @@
           if (firstAvailIdx == draftData[pos].length) {
             // No remaining players in this position
             tableHTML += '<td>' + pos + '</td>';
-            tableHTML += '<td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td></tr>';
+            tableHTML += '<td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td></tr>';
           }
 
           rank = firstAvailIdx + 1;
@@ -126,6 +127,7 @@
           projFantasyPoints = draftData[pos][firstAvailIdx]['projected_fantasy_total'];
           pfpSlope = draftData[pos][firstAvailIdx]['projected_fantasy_slope'];
           avgExpertRank = draftData[pos][firstAvailIdx]['avg_expert_rank'];
+          overallADP = draftData[pos][firstAvailIdx]['overall_adp'];
 
           drop6Idx = Math.min(draftData[pos].length, firstAvailIdx+6);
           drop12Idx = Math.min(draftData[pos].length, firstAvailIdx+12);
@@ -140,6 +142,7 @@
           tableHTML += '<td>' + round2Decimals(drop6) + '</td>';
           tableHTML += '<td>' + round2Decimals(drop12) + '</td>';
           tableHTML += '<td>' + round2Decimals(avgExpertRank) + '</td>';
+          tableHTML += '<td>' + overallADP + '</td>';
 
           tableHTML += '</tr>';
         }

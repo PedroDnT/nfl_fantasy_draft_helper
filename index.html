@@ -5,7 +5,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
   </head>
   <body>
-    <h1>2020 NFL Fantasy Draft Helper</h1>
+    <h1>2021 NFL Fantasy Draft Helper</h1>
     <div class="container">
       <h2>Top Remaining Players (By Position)</h2>
       <table class="table">
@@ -376,7 +376,7 @@
         createFantasyPositionChart();
         createFantasyAllCharts();
 
-        fetch('https://raw.githubusercontent.com/RyanJDick/nfl_fantasy_draft_helper/master/draft_data_2020.csv')
+        fetch('https://raw.githubusercontent.com/RyanJDick/nfl_fantasy_draft_helper/master/draft_data_2021.csv')
           .then(response => response.text())
           .then(data => parseDraftDataCSV(data))
           .then(() => {

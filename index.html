@@ -1,393 +1,403 @@
 <!doctype html>
 <html lang=en>
-  <head>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
-  </head>
-  <body>
-    <h1>2021 NFL Fantasy Draft Helper</h1>
-    <div class="container">
-      <h2>Top Remaining Players (By Position)</h2>
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Position</th>
-            <th>Rank</th>
-            <th>Player Name</th>
-            <th>Projected Fantasy Points</th>
-            <th>PFP Slope</th>
-            <th>PFP Drop-6</th>
-            <th>PFP Drop-12</th>
-            <th>Avg. Expert Rank</th>
-            <th>Overall ADP</th>
-          </tr>
-        </thead>
-        <tbody id="summary_table">
-        </tbody>
-      </table>
-    </div>
 
-    <div class="container">
-      <h2>Projected Fantasy Points</h2>
-      <ul class="nav nav-tabs">
-        <li><a id="QB_tab_button" class="nav-link active" href="#" onclick="onPositionTabClick(event, 'QB')">QB</a></li>
-        <li><a id="RB_tab_button" class="nav-link" href="#" onclick="onPositionTabClick(event, 'RB')">RB</a></li>
-        <li><a id="WR_tab_button" class="nav-link" href="#" onclick="onPositionTabClick(event, 'WR')">WR</a></li>
-        <li><a id="TE_tab_button" class="nav-link" href="#" onclick="onPositionTabClick(event, 'TE')">TE</a></li>
-        <li><a id="K_tab_button" class="nav-link" href="#" onclick="onPositionTabClick(event, 'K')">K</a></li>
-        <li><a id="ALL_tab_button" class="nav-link" href="#" onclick="onPositionTabClick(event, 'ALL')">ALL</a></li>
-      </ul>
-      <div id="per_position_tab" class=chart-tab>
-        <canvas id="fantasy_point_chart" width="400" height="200"></canvas>
-      </div>
-      <div id="all_position_tab" class=chart-tab>
-        <div class="row">
-          <div class="col">
-            <div class="canvas-wrapper" style="max-width: 500px;">
-              <canvas id="QB_point_chart" class="all-position-sub-chart" width="500" height="300"></canvas>
-            </div>
-          </div>
-          <div class="col">
-            <div class="canvas-wrapper" style="max-width: 500px;">
-              <canvas id="RB_point_chart" class="all-position-sub-chart" width="500" height="300"></canvas>
-            </div>
+<head>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+</head>
+
+<body>
+  <h1>2021 NFL Fantasy Draft Helper</h1>
+  <div class="container">
+    <h2>Top Remaining Players (By Position)</h2>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Position</th>
+          <th>Rank</th>
+          <th>Player Name</th>
+          <th>Projected Fantasy Points</th>
+          <th>PFP Slope</th>
+          <th>PFP Drop-6</th>
+          <th>PFP Drop-12</th>
+          <th>Avg. Expert Rank</th>
+          <th>Overall ADP</th>
+        </tr>
+      </thead>
+      <tbody id="summary_table">
+      </tbody>
+    </table>
+  </div>
+
+  <div class="container">
+    <h2>Projected Fantasy Points</h2>
+    <ul class="nav nav-tabs">
+      <li><a id="QB_tab_button" class="nav-link active" href="#" onclick="onPositionTabClick(event, 'QB')">QB</a></li>
+      <li><a id="RB_tab_button" class="nav-link" href="#" onclick="onPositionTabClick(event, 'RB')">RB</a></li>
+      <li><a id="WR_tab_button" class="nav-link" href="#" onclick="onPositionTabClick(event, 'WR')">WR</a></li>
+      <li><a id="TE_tab_button" class="nav-link" href="#" onclick="onPositionTabClick(event, 'TE')">TE</a></li>
+      <li><a id="K_tab_button" class="nav-link" href="#" onclick="onPositionTabClick(event, 'K')">K</a></li>
+      <li><a id="ALL_tab_button" class="nav-link" href="#" onclick="onPositionTabClick(event, 'ALL')">ALL</a></li>
+    </ul>
+    <div id="per_position_tab" class=chart-tab>
+      <canvas id="fantasy_point_chart" width="400" height="200"></canvas>
+    </div>
+    <div id="all_position_tab" class=chart-tab>
+      <div class="row">
+        <div class="col">
+          <div class="canvas-wrapper" style="max-width: 500px;">
+            <canvas id="QB_point_chart" class="all-position-sub-chart" width="500" height="300"></canvas>
           </div>
         </div>
-        <div class="row">
-          <div class="col">
-            <div class="canvas-wrapper" style="max-width: 500px;">
-              <canvas id="WR_point_chart" class="all-position-sub-chart" width="500" height="300"></canvas>
-            </div>
-          </div>
-          <div class="col">
-            <div class="canvas-wrapper" style="max-width: 500px;">
-              <canvas id="TE_point_chart" class="all-position-sub-chart" width="500" height="300"></canvas>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col">
-            <div class="canvas-wrapper" style="max-width: 500px;">
-              <canvas id="K_point_chart" class="all-position-sub-chart" width="500" height="300"></canvas>
-            </div>
-          </div>
-          <div class="col">
-            <div class="canvas-wrapper" style="max-width: 500px;">
-            </div>
+        <div class="col">
+          <div class="canvas-wrapper" style="max-width: 500px;">
+            <canvas id="RB_point_chart" class="all-position-sub-chart" width="500" height="300"></canvas>
           </div>
         </div>
       </div>
+      <div class="row">
+        <div class="col">
+          <div class="canvas-wrapper" style="max-width: 500px;">
+            <canvas id="WR_point_chart" class="all-position-sub-chart" width="500" height="300"></canvas>
+          </div>
+        </div>
+        <div class="col">
+          <div class="canvas-wrapper" style="max-width: 500px;">
+            <canvas id="TE_point_chart" class="all-position-sub-chart" width="500" height="300"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <div class="canvas-wrapper" style="max-width: 500px;">
+            <canvas id="K_point_chart" class="all-position-sub-chart" width="500" height="300"></canvas>
+          </div>
+        </div>
+        <div class="col">
+          <div class="canvas-wrapper" style="max-width: 500px;">
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <script>
-      const allPositions = ['QB', 'RB', 'WR', 'TE', 'K'];
-      const maxPlayersInChart = 45;
+  <script>
+    const allPositions = ['QB', 'RB', 'WR', 'TE', 'K'];
+    const maxPlayersInChart = 45;
 
-      const chartColors = {
-        red: 'rgb(255, 99, 132)',
-        orange: 'rgb(255, 159, 64)',
-        yellow: 'rgb(255, 205, 86)',
-        green: 'rgb(75, 192, 192)',
-        blue: 'rgb(54, 162, 235)',
-        purple: 'rgb(153, 102, 255)',
-        grey: 'rgb(231,233,237)',
-      };
+    const chartColors = {
+      red: 'rgb(255, 99, 132)',
+      orange: 'rgb(255, 159, 64)',
+      yellow: 'rgb(255, 205, 86)',
+      green: 'rgb(75, 192, 192)',
+      blue: 'rgb(54, 162, 235)',
+      purple: 'rgb(153, 102, 255)',
+      grey: 'rgb(231,233,237)',
+    };
 
-      var draftData = null;
-      var curPos = 'QB';
+    var draftData = null;
+    var curPos = 'QB';
 
-      var fantasyPointPosChart = null;
-      var fantasyPointAllCharts = null;
+    var fantasyPointPosChart = null;
+    var fantasyPointAllCharts = null;
 
-      function round2Decimals(num) {
-        return Math.round((num + Number.EPSILON) * 100) / 100;
-      }
+    function round2Decimals(num) {
+      return Math.round((num + Number.EPSILON) * 100) / 100;
+    }
 
-      function renderSummaryTable() {
-        var tableHTML;
+    function renderSummaryTable() {
+      var tableHTML;
 
-        var pos, rank, playerName, projFantasyPoints, pfpSlope, avgExpertRank, drop6, drop12;
-        for (let posIdx=0; posIdx < allPositions.length; posIdx++) {
-          tableHTML += '<tr>';
-          pos = allPositions[posIdx];
+      var pos, rank, playerName, projFantasyPoints, pfpSlope, avgExpertRank, drop6, drop12;
+      for (let posIdx = 0; posIdx < allPositions.length; posIdx++) {
+        tableHTML += '<tr>';
+        pos = allPositions[posIdx];
 
-          var firstAvailIdx = 0;
-          while (firstAvailIdx < draftData[pos].length && draftData[pos][firstAvailIdx]['drafted']) {
-            firstAvailIdx++;
-          }
+        var firstAvailIdx = 0;
+        while (firstAvailIdx < draftData[pos].length && draftData[pos][firstAvailIdx]['drafted']) {
+          firstAvailIdx++;
+        }
 
-          if (firstAvailIdx == draftData[pos].length) {
-            // No remaining players in this position
-            tableHTML += '<td>' + pos + '</td>';
-            tableHTML += '<td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td></tr>';
-          }
-
-          rank = firstAvailIdx + 1;
-          playerName = draftData[pos][firstAvailIdx]['player_name'];
-          projFantasyPoints = draftData[pos][firstAvailIdx]['projected_fantasy_total'];
-          pfpSlope = draftData[pos][firstAvailIdx]['projected_fantasy_slope'];
-          avgExpertRank = draftData[pos][firstAvailIdx]['avg_expert_rank'];
-          overallADP = draftData[pos][firstAvailIdx]['overall_adp'];
-
-          drop6Idx = Math.min(draftData[pos].length, firstAvailIdx+6);
-          drop12Idx = Math.min(draftData[pos].length, firstAvailIdx+12);
-          drop6 = draftData[pos][firstAvailIdx]['projected_fantasy_total'] - draftData[pos][drop6Idx]['projected_fantasy_total'];
-          drop12 = draftData[pos][firstAvailIdx]['projected_fantasy_total'] - draftData[pos][drop12Idx]['projected_fantasy_total'];
-
+        if (firstAvailIdx == draftData[pos].length) {
+          // No remaining players in this position
           tableHTML += '<td>' + pos + '</td>';
-          tableHTML += '<td>' + rank + '</td>';
-          tableHTML += '<td>' + playerName + '</td>';
-          tableHTML += '<td>' + round2Decimals(projFantasyPoints) + '</td>';
-          tableHTML += '<td>' + round2Decimals(pfpSlope) + '</td>';
-          tableHTML += '<td>' + round2Decimals(drop6) + '</td>';
-          tableHTML += '<td>' + round2Decimals(drop12) + '</td>';
-          tableHTML += '<td>' + round2Decimals(avgExpertRank) + '</td>';
-          tableHTML += '<td>' + overallADP + '</td>';
-
-          tableHTML += '</tr>';
+          tableHTML += '<td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td></tr>';
         }
-        $('#summary_table').html(tableHTML);
-      }
 
-      function buildChartClickHander(pos, chart) {
-        return (evt, activePoint) => {
-          if (activePoint.length == 0) {
-            // Clicked on chart, but not on a specific player
-            for(let i = 0; i < chart.data.labels.length; i++) {
-              if (!draftData[pos][i]['drafted']) {
-                draftData[pos][i]['drafted'] = true;
-                chart.data.datasets[0].backgroundColor[i] = chartColors.red;
-                break;
-              }
-            }
-          } else {
-            var elemIdx = activePoint[0]._index;
-            if (evt.shiftKey) {
-              // Hold shift to toggle all players above selected player
-              for (let i = 0; i <= elemIdx; i++) {
-                draftData[pos][i]['drafted'] = !draftData[pos][i]['drafted'];
-                if (draftData[pos][i]['drafted']) {
-                  chart.data.datasets[0].backgroundColor[i] = chartColors.red;
-                } else {
-                  chart.data.datasets[0].backgroundColor[i] = chartColors.green;
-                }
-              }
-            } else {
-              draftData[pos][elemIdx]['drafted'] = !draftData[pos][elemIdx]['drafted'];
-              if (draftData[pos][elemIdx]['drafted']) {
-                chart.data.datasets[0].backgroundColor[elemIdx] = chartColors.red;
-              } else {
-                chart.data.datasets[0].backgroundColor[elemIdx] = chartColors.green;
-              }
+        rank = firstAvailIdx + 1;
+        playerName = draftData[pos][firstAvailIdx]['player_name'];
+        projFantasyPoints = draftData[pos][firstAvailIdx]['projected_fantasy_total'];
+        pfpSlope = draftData[pos][firstAvailIdx]['projected_fantasy_slope'];
+        avgExpertRank = draftData[pos][firstAvailIdx]['avg_expert_rank'];
+        overallADP = draftData[pos][firstAvailIdx]['overall_adp'];
+
+        drop6Idx = Math.min(draftData[pos].length, firstAvailIdx + 6);
+        drop12Idx = Math.min(draftData[pos].length, firstAvailIdx + 12);
+        drop6 = draftData[pos][firstAvailIdx]['projected_fantasy_total'] - draftData[pos][drop6Idx]['projected_fantasy_total'];
+        drop12 = draftData[pos][firstAvailIdx]['projected_fantasy_total'] - draftData[pos][drop12Idx]['projected_fantasy_total'];
+
+        tableHTML += '<td>' + pos + '</td>';
+        tableHTML += '<td>' + rank + '</td>';
+        tableHTML += '<td>' + playerName + '</td>';
+        tableHTML += '<td>' + round2Decimals(projFantasyPoints) + '</td>';
+        tableHTML += '<td>' + round2Decimals(pfpSlope) + '</td>';
+        tableHTML += '<td>' + round2Decimals(drop6) + '</td>';
+        tableHTML += '<td>' + round2Decimals(drop12) + '</td>';
+        tableHTML += '<td>' + round2Decimals(avgExpertRank) + '</td>';
+        tableHTML += '<td>' + overallADP + '</td>';
+
+        tableHTML += '</tr>';
+      }
+      $('#summary_table').html(tableHTML);
+    }
+
+    function buildChartClickHander(pos, chart) {
+      return (evt, activePoint) => {
+        if (activePoint.length == 0) {
+          // Clicked on chart, but not on a specific player
+          for (let i = 0; i < chart.data.labels.length; i++) {
+            if (!draftData[pos][i]['drafted']) {
+              draftData[pos][i]['drafted'] = true;
+              chart.data.datasets[0].backgroundColor[i] = chartColors.red;
+              break;
             }
           }
-          chart.update();
-          renderSummaryTable();
-        }
-      }
-
-      function onPositionTabClick(event, pos) {
-        event.preventDefault();
-        $(".nav-link").removeClass("active");
-        $("#" + pos + "_tab_button").addClass("active");
-        curPos = pos;
-
-        renderFantasyChart();
-      }
-
-      function renderFantasyChart() {
-        if (curPos == "ALL") {
-          $("#per_position_tab").hide();
-          renderAllPositionFantasyChart();
         } else {
-          $("#all_position_tab").hide();
-          renderPositionFantasyChart();
-        }
-      }
-
-      function updateChartData(chart, pos) {
-        var labels = [];
-        var projectedFantasyTotalData = [];
-        var pfpSlope = [];
-        var bkgdColors = [];
-
-        var posDraftData = draftData[pos];
-        for(let i = 0; i < posDraftData.length && labels.length < maxPlayersInChart; i++) {
-          labels.push(posDraftData[i]['player_name'] + " (" + (i + 1) + ")");
-
-          if (posDraftData[i]['drafted']) {
-            bkgdColors.push(chartColors.red);
+          var elemIdx = activePoint[0]._index;
+          if (evt.shiftKey) {
+            // Hold shift to toggle all players above selected player
+            for (let i = 0; i <= elemIdx; i++) {
+              draftData[pos][i]['drafted'] = !draftData[pos][i]['drafted'];
+              if (draftData[pos][i]['drafted']) {
+                chart.data.datasets[0].backgroundColor[i] = chartColors.red;
+              } else {
+                chart.data.datasets[0].backgroundColor[i] = chartColors.green;
+              }
+            }
           } else {
-            bkgdColors.push(chartColors.green);
-          }
-
-          projectedFantasyTotalData.push(round2Decimals(posDraftData[i]['projected_fantasy_total']));
-          pfpSlope.push(round2Decimals(posDraftData[i]['projected_fantasy_slope'] * -1));
-        }
-
-        chart.data.labels = labels;
-        chart.data.datasets[0].data = projectedFantasyTotalData;
-        chart.data.datasets[0].backgroundColor = bkgdColors;
-        chart.data.datasets[1].data = pfpSlope;
-
-        chart.options.title.text = pos;
-        chart.options.onClick = buildChartClickHander(pos, chart);
-      }
-
-      function renderAllPositionFantasyChart() {
-        $("#all_position_tab").show();
-
-        for(let posIdx = 0; posIdx < allPositions.length; posIdx++) {
-          // XXX: Not entirely sure why this is necessary, but was running into issues where charts wouldn't appear
-          // until window was resized. Destroying and re-creating the chart solved the problem.
-          fantasyPointAllCharts[allPositions[posIdx]].destroy();
-          var canvas = document.getElementById(allPositions[posIdx] + '_point_chart')
-          var ctx = canvas.getContext('2d');
-          fantasyPointAllCharts[allPositions[posIdx]] = createEmptyFantasyChart(ctx, false);
-
-          updateChartData(fantasyPointAllCharts[allPositions[posIdx]], allPositions[posIdx]);
-          fantasyPointAllCharts[allPositions[posIdx]].update();
-        }
-      }
-
-      function renderPositionFantasyChart() {
-        $("#per_position_tab").show();
-        fantasyPointPosChart.destroy();
-        var canvas = document.getElementById('fantasy_point_chart');
-        var ctx = canvas.getContext('2d');
-        fantasyPointPosChart = createEmptyFantasyChart(ctx, true);
-
-        updateChartData(fantasyPointPosChart, curPos);
-        fantasyPointPosChart.update();
-      }
-
-      function parseDraftDataCSV(draftDataCSV) {
-        var csvLines = draftDataCSV.split('\n');
-        var csvHeaders = csvLines[0].split(',');
-
-        const numFields = ['projected_rank', 'avg_expert_rank', 'projected_fantasy_slope', 'projected_fantasy_total'];
-
-        draftData = {};
-        for(let i = 0; i < allPositions.length; i++) {
-          draftData[allPositions[i]] = [];
-        }
-
-        var csvLine;
-        for (let i=1; i < csvLines.length; i++) {
-          csvLine = csvLines[i].split(',');
-          if (csvLine.length <= 1) {
-            break;
-          }
-          var playerData = {drafted: false};
-          var playerPos;
-          for (let propertyIdx = 0; propertyIdx < csvHeaders.length; propertyIdx++) {
-            if (csvHeaders[propertyIdx] == 'position') {
-              playerPos = csvLine[propertyIdx];
-            } else if (numFields.includes(csvHeaders[propertyIdx])) {
-              playerData[csvHeaders[propertyIdx]] = Number(csvLine[propertyIdx]);
+            draftData[pos][elemIdx]['drafted'] = !draftData[pos][elemIdx]['drafted'];
+            if (draftData[pos][elemIdx]['drafted']) {
+              chart.data.datasets[0].backgroundColor[elemIdx] = chartColors.red;
             } else {
-              playerData[csvHeaders[propertyIdx]] = csvLine[propertyIdx];
+              chart.data.datasets[0].backgroundColor[elemIdx] = chartColors.green;
             }
           }
-          draftData[playerPos].push(playerData);
         }
+        chart.update();
+        renderSummaryTable();
+      }
+    }
+
+    function onPositionTabClick(event, pos) {
+      event.preventDefault();
+      $(".nav-link").removeClass("active");
+      $("#" + pos + "_tab_button").addClass("active");
+      curPos = pos;
+
+      renderFantasyChart();
+    }
+
+    function renderFantasyChart() {
+      if (curPos == "ALL") {
+        $("#per_position_tab").hide();
+        renderAllPositionFantasyChart();
+      } else {
+        $("#all_position_tab").hide();
+        renderPositionFantasyChart();
+      }
+    }
+
+    function updateChartData(chart, pos) {
+      var labels = [];
+      var projectedFantasyTotalData = [];
+      var pfpSlope = [];
+      var bkgdColors = [];
+
+      var posDraftData = draftData[pos];
+      for (let i = 0; i < posDraftData.length && labels.length < maxPlayersInChart; i++) {
+        labels.push(posDraftData[i]['player_name'] + " (" + (i + 1) + ")");
+
+        if (posDraftData[i]['drafted']) {
+          bkgdColors.push(chartColors.red);
+        } else {
+          bkgdColors.push(chartColors.green);
+        }
+
+        projectedFantasyTotalData.push(round2Decimals(posDraftData[i]['projected_fantasy_total']));
+        pfpSlope.push(round2Decimals(posDraftData[i]['projected_fantasy_slope'] * -1));
       }
 
-      function createEmptyFantasyChart(ctx) {
-        var chartType = "bar";
+      chart.data.labels = labels;
+      chart.data.datasets[0].data = projectedFantasyTotalData;
+      chart.data.datasets[0].backgroundColor = bkgdColors;
+      chart.data.datasets[1].data = pfpSlope;
 
-        return new Chart(ctx, {
-            type: chartType,
-            data: {
-                labels: [],
-                datasets: [
-                  {
-                    label: 'Projected Fantasy Point Total',
-                    data: [],
-                    backgroundColor: [],
-                    borderWidth: 1,
-                    yAxisID: 'points-total',
-                    order: 2,
-                  },
-                  {
-                    type: 'line',
-                    label: 'PFP Slope',
-                    borderColor: chartColors.blue,
-                    fill: false,
-                    data: [],
-                    yAxisID: 'pfp-slope',
-                    // borderWidth: 1,
-                    order: 1,
-                  },
-                ]
+      chart.options.title.text = pos;
+      chart.options.onClick = buildChartClickHander(pos, chart);
+    }
+
+    function renderAllPositionFantasyChart() {
+      $("#all_position_tab").show();
+
+      for (let posIdx = 0; posIdx < allPositions.length; posIdx++) {
+        // XXX: Not entirely sure why this is necessary, but was running into issues where charts wouldn't appear
+        // until window was resized. Destroying and re-creating the chart solved the problem.
+        fantasyPointAllCharts[allPositions[posIdx]].destroy();
+        var canvas = document.getElementById(allPositions[posIdx] + '_point_chart')
+        var ctx = canvas.getContext('2d');
+        fantasyPointAllCharts[allPositions[posIdx]] = createEmptyFantasyChart(ctx, false);
+
+        updateChartData(fantasyPointAllCharts[allPositions[posIdx]], allPositions[posIdx]);
+        fantasyPointAllCharts[allPositions[posIdx]].update();
+      }
+    }
+
+    function renderPositionFantasyChart() {
+      $("#per_position_tab").show();
+      fantasyPointPosChart.destroy();
+      var canvas = document.getElementById('fantasy_point_chart');
+      var ctx = canvas.getContext('2d');
+      fantasyPointPosChart = createEmptyFantasyChart(ctx, true);
+
+      updateChartData(fantasyPointPosChart, curPos);
+      fantasyPointPosChart.update();
+    }
+
+    function parseDraftDataCSV(draftDataCSV) {
+      var csvLines = draftDataCSV.split('\n');
+      var csvHeaders = csvLines[0].split(',');
+
+      const numFields = ['projected_rank', 'avg_expert_rank', 'projected_fantasy_slope', 'projected_fantasy_total'];
+
+      draftData = {};
+      for (let i = 0; i < allPositions.length; i++) {
+        draftData[allPositions[i]] = [];
+      }
+
+      var csvLine;
+      for (let i = 1; i < csvLines.length; i++) {
+        csvLine = csvLines[i].split(',');
+        if (csvLine.length <= 1) {
+          break;
+        }
+        var playerData = { drafted: false };
+        var playerPos;
+        for (let propertyIdx = 0; propertyIdx < csvHeaders.length; propertyIdx++) {
+          if (csvHeaders[propertyIdx] == 'position') {
+            playerPos = csvLine[propertyIdx];
+          } else if (numFields.includes(csvHeaders[propertyIdx])) {
+            playerData[csvHeaders[propertyIdx]] = Number(csvLine[propertyIdx]);
+          } else {
+            playerData[csvHeaders[propertyIdx]] = csvLine[propertyIdx];
+          }
+        }
+        draftData[playerPos].push(playerData);
+      }
+    }
+
+    function createEmptyFantasyChart(ctx) {
+      var chartType = "bar";
+
+      return new Chart(ctx, {
+        type: chartType,
+        data: {
+          labels: [],
+          datasets: [
+            {
+              label: 'Projected Fantasy Point Total',
+              data: [],
+              backgroundColor: [],
+              borderWidth: 1,
+              yAxisID: 'points-total',
+              order: 2,
             },
-            options: {
-              scales: {
-                yAxes: [
-                  {
-                    id: 'points-total',
-                    position: 'left',
-                    display: true,
-                    gridLines: {
-                      display: false,
-                    },
-                    ticks: {
-                      min: 0,
-                      max: 350,
-                    }
-                  },
-                  {
-                    id: 'pfp-slope',
-                    position: 'right',
-                    display: true,
-                    ticks: {
-                      min: 0,
-                      max: 10
-                    }
-                  },
-                ]
-              },
-              title: {
+            {
+              type: 'line',
+              label: 'PFP Slope',
+              borderColor: chartColors.blue,
+              fill: false,
+              data: [],
+              yAxisID: 'pfp-slope',
+              // borderWidth: 1,
+              order: 1,
+            },
+          ]
+        },
+        options: {
+          scales: {
+            yAxes: [
+              {
+                id: 'points-total',
+                position: 'left',
                 display: true,
-                text: '',
+                gridLines: {
+                  display: false,
+                },
+                ticks: {
+                  min: 0,
+                  max: 350,
+                }
               },
-              tooltips: {
-                mode:'index',
-                intersect: true,
+              {
+                id: 'pfp-slope',
+                position: 'right',
+                display: true,
+                ticks: {
+                  min: 0,
+                  max: 10
+                }
               },
-            }
-        });
-      }
-
-      function createFantasyPositionChart() {
-        var ctx = document.getElementById('fantasy_point_chart').getContext('2d');
-        fantasyPointPosChart = createEmptyFantasyChart(ctx);
-      }
-
-      function createFantasyAllCharts() {
-        fantasyPointAllCharts = {};
-        for(let posIdx = 0; posIdx < allPositions.length; posIdx++) {
-          var ctx = document.getElementById(allPositions[posIdx] + '_point_chart').getContext('2d');
-          fantasyPointAllCharts[allPositions[posIdx]] = createEmptyFantasyChart(ctx);
+            ]
+          },
+          title: {
+            display: true,
+            text: '',
+          },
+          tooltips: {
+            mode: 'index',
+            intersect: true,
+          },
         }
-      }
-
-      document.addEventListener("DOMContentLoaded", function(){
-        createFantasyPositionChart();
-        createFantasyAllCharts();
-
-        fetch('https://raw.githubusercontent.com/RyanJDick/nfl_fantasy_draft_helper/master/draft_data_2021.csv')
-          .then(response => response.text())
-          .then(data => parseDraftDataCSV(data))
-          .then(() => {
-            renderFantasyChart();
-            renderSummaryTable();
-          });
       });
-    </script>
+    }
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
-  </body>
+    function createFantasyPositionChart() {
+      var ctx = document.getElementById('fantasy_point_chart').getContext('2d');
+      fantasyPointPosChart = createEmptyFantasyChart(ctx);
+    }
+
+    function createFantasyAllCharts() {
+      fantasyPointAllCharts = {};
+      for (let posIdx = 0; posIdx < allPositions.length; posIdx++) {
+        var ctx = document.getElementById(allPositions[posIdx] + '_point_chart').getContext('2d');
+        fantasyPointAllCharts[allPositions[posIdx]] = createEmptyFantasyChart(ctx);
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      createFantasyPositionChart();
+      createFantasyAllCharts();
+
+      fetch('https://raw.githubusercontent.com/RyanJDick/nfl_fantasy_draft_helper/master/draft_data_2021.csv')
+        .then(response => response.text())
+        .then(data => parseDraftDataCSV(data))
+        .then(() => {
+          renderFantasyChart();
+          renderSummaryTable();
+        });
+    });
+  </script>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+    integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+    integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+    crossorigin="anonymous"></script>
+</body>
+
 </html>

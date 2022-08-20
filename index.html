@@ -379,7 +379,7 @@
       createFantasyPositionChart();
       createFantasyAllCharts();
 
-      fetch('https://raw.githubusercontent.com/RyanJDick/nfl_fantasy_draft_helper/master/draft_data_2021.csv')
+      fetch('https://raw.githubusercontent.com/RyanJDick/nfl_fantasy_draft_helper/master/draft_data_2022.csv')
         .then(response => response.text())
         .then(data => parseDraftDataCSV(data))
         .then(() => {
